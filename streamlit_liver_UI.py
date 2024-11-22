@@ -35,18 +35,18 @@ with st.form("form_diagnosis"):
     col1, col2 = st.columns(2)
 
     with col1:
-        Age = st.text_input("Umur", value="0")
-        Total_Bilirubin = st.text_input("Total Bilirubin", value="0.0")
-        Alkaline_Phosphotase = st.text_input("Alkaline Phosphotase", value="0")
-        Aspartate_Aminotransferase = st.text_input("Aspartate Aminotransferase", value="0")
-        Albumin = st.text_input("Albumin", value="0.0")
+        Age = st.text_input("Umur")
+        Total_Bilirubin = st.text_input("Total Bilirubin")
+        Alkaline_Phosphotase = st.text_input("Alkaline Phosphotase")
+        Aspartate_Aminotransferase = st.text_input("Aspartate Aminotransferase")
+        Albumin = st.text_input("Albumin")
 
     with col2:
         Gender = st.selectbox("Gender", options=["Laki-laki", "Perempuan"], index=0)
-        Direct_Bilirubin = st.text_input("Direct Bilirubin", value="0.0")
-        Alamine_Aminotransferase = st.text_input("Alamine Aminotransferase", value="0")
-        Total_Protiens = st.text_input("Total Protein", value="0.0")
-        Albumin_and_Globulin_Ratio = st.text_input("Albumin & Globulin Ratio", value="0.0")
+        Direct_Bilirubin = st.text_input("Direct Bilirubin")
+        Alamine_Aminotransferase = st.text_input("Alamine Aminotransferase)
+        Total_Protiens = st.text_input("Total Protein")
+        Albumin_and_Globulin_Ratio = st.text_input("Albumin & Globulin Ratio")
 
     # Tombol untuk prediksi
     submitted = st.form_submit_button("🔍 Prediksi")
