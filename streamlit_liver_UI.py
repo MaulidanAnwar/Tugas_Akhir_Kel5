@@ -4,6 +4,12 @@ import streamlit as st
 from io import BytesIO
 from xhtml2pdf import pisa
 
+st.set_page_config(
+    page_title="Prediksi Penyakit Liver",  # Judul yang muncul di tab browser
+    page_icon="🩺",  # Ikon yang muncul di tab browser
+    layout="centered",  # Opsi layout: "centered" atau "wide"
+)
+
 # Fungsi untuk membuat PDF
 def generate_pdf(content):
     pdf_buffer = BytesIO()
