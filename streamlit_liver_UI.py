@@ -76,7 +76,7 @@ def page_form_result_download(liver_model, scaler):
         Gender = st.selectbox("Gender", options=["Laki-laki", "Perempuan"], index=0)
         Direct_Bilirubin = st.text_input("Direct Bilirubin")
         Alamine_Aminotransferase = st.text_input("Alamine Aminotransferase")
-        Total_Protiens = st.text_input("Total Protein")
+        Total_Protiens = st.text_input("Total Protiens")
         Albumin_and_Globulin_Ratio = st.text_input("Albumin & Globulin Ratio")
 
     if st.button("🔍 Prediksi"):
