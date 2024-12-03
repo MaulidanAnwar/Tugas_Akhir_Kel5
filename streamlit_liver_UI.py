@@ -132,7 +132,6 @@ def page_form_result_download(liver_model, scaler):
             st.error(f"Gagal membuat PDF: {e}")
     
 def main():
-    """Alur utama aplikasi dengan dua sequence."""
     liver_model, scaler = load_assets()
     if st.session_state['page'] == 1:
         page_welcome()
