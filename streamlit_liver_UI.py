@@ -51,8 +51,9 @@ def page_welcome():
     st.title("🩺 **Prediksi Penyakit Liver**")
     st.subheader("Selamat datang! Aplikasi ini menggunakan data mining untuk mendeteksi kemungkinan penyakit liver.")
     st.markdown("---")
-    if st.button("Mulai"):
+    if st.button("Mulai", key="start_button"):
         st.session_state['page'] = 2
+        st.experimental_rerun() 
 
 def page_form_result_download(liver_model, scaler):
     st.header("📝 Masukkan Data Pasien")
