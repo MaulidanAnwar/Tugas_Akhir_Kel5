@@ -53,7 +53,7 @@ def page_welcome():
     st.markdown("---")
     if st.button("Mulai", key="start_button"):
         st.session_state['page'] = 2
-        st.experimental_rerun() 
+        st.rerun()
 
 def page_form_result_download(liver_model, scaler):
     st.header("📝 Masukkan Data Pasien")
