@@ -63,6 +63,9 @@ def page_welcome():
 
 def page_form_result_download(liver_model, scaler):
     st.header("📝 Masukkan Data Pasien")
+    
+    Nama = st.text_input("Nama Pasien")
+    
     col1, col2 = st.columns(2)
 
     with col1:
@@ -98,21 +101,22 @@ def page_form_result_download(liver_model, scaler):
             st.error("Pastikan semua input berupa angka yang valid!")
 
     if st.session_state['liv_diagnosis']:
-        user_inputs = [Age, Gender, Total_Bilirubin, Direct_Bilirubin, Alkaline_Phosphotase, 
+        user_inputs = [Nama, Age, Gender, Total_Bilirubin, Direct_Bilirubin, Alkaline_Phosphotase, 
                        Alamine_Aminotransferase, Aspartate_Aminotransferase, Total_Protiens, 
                        Albumin, Albumin_and_Globulin_Ratio]
         html_content = f"""
         <h1>Data Mining Prediksi Liver</h1>
-        <p><strong>Umur:</strong> {user_inputs[0]}</p>
-        <p><strong>Gender:</strong> {user_inputs[1]}</p>
-        <p><strong>Total Bilirubin:</strong> {user_inputs[2]}</p>
-        <p><strong>Direct Bilirubin:</strong> {user_inputs[3]}</p>
-        <p><strong>Alkaline Phosphotase:</strong> {user_inputs[4]}</p>
-        <p><strong>Alamine Aminotransferase:</strong> {user_inputs[5]}</p>
-        <p><strong>Aspartate Aminotransferase:</strong> {user_inputs[6]}</p>
-        <p><strong>Total Protein:</strong> {user_inputs[7]}</p>
-        <p><strong>Albumin:</strong> {user_inputs[8]}</p>
-        <p><strong>Albumin and Globulin Ratio:</strong> {user_inputs[9]}</p>
+        <p><strong>Nama:</strong> {user_inputs[0]}</p>
+        <p><strong>Umur:</strong> {user_inputs[1]}</p>
+        <p><strong>Gender:</strong> {user_inputs[2]}</p>
+        <p><strong>Total Bilirubin:</strong> {user_inputs[3]}</p>
+        <p><strong>Direct Bilirubin:</strong> {user_inputs[4]}</p>
+        <p><strong>Alkaline Phosphotase:</strong> {user_inputs[5]}</p>
+        <p><strong>Alamine Aminotransferase:</strong> {user_inputs[6]}</p>
+        <p><strong>Aspartate Aminotransferase:</strong> {user_inputs[7]}</p>
+        <p><strong>Total Protein:</strong> {user_inputs[8]}</p>
+        <p><strong>Albumin:</strong> {user_inputs[9]}</p>
+        <p><strong>Albumin and Globulin Ratio:</strong> {user_inputs[10]}</p>
         <h2>Hasil Diagnosis:</h2>
         <p>{st.session_state['liv_diagnosis']}</p>
         """
