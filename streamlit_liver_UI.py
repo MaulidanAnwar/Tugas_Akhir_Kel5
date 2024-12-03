@@ -4,7 +4,6 @@ import streamlit as st
 from io import BytesIO
 from xhtml2pdf import pisa
 
-# ======== Fungsi Utilitas ========
 def load_assets():
     """Load model dan scaler yang diperlukan."""
     liver_model = pickle.load(open('liver_model.sav', 'rb'))
@@ -12,7 +11,6 @@ def load_assets():
     return liver_model, scaler
 
 def generate_pdf(content):
-    """Generate file PDF dari konten HTML."""
     pdf_buffer = BytesIO()
     pisa_status = pisa.CreatePDF(
         src=BytesIO(content.encode("utf-8")),
@@ -39,16 +37,12 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
-# Session state agar 
 if 'page' not in st.session_state:
     st.session_state['page'] = 1
 if 'liv_diagnosis' not in st.session_state:
     st.session_state['liv_diagnosis'] = ''
 
-# ======== Halaman ========
 def page_welcome():
-    """Halaman pertama untuk menyambut pengguna."""
     st.title("🩺 **Prediksi Penyakit Liver**")
     st.subheader("Selamat datang! Aplikasi ini menggunakan data mining untuk mendeteksi kemungkinan penyakit liver.")
     st.markdown("---")
@@ -92,7 +86,6 @@ def page_form_result_download(liver_model, scaler):
         except ValueError:
             st.error("Pastikan semua input berupa angka yang valid!")
 
-    # Unduh PDF
     if st.session_state['liv_diagnosis']:
         user_inputs = [Age, Gender, Total_Bilirubin, Direct_Bilirubin, Alkaline_Phosphotase, 
                        Alamine_Aminotransferase, Aspartate_Aminotransferase, Total_Protiens, 
@@ -123,7 +116,6 @@ def page_form_result_download(liver_model, scaler):
         except ValueError as e:
             st.error(f"Gagal membuat PDF: {e}")
     
-# ======== Alur Utama ========
 def main():
     """Alur utama aplikasi dengan dua sequence."""
     liver_model, scaler = load_assets()
@@ -132,6 +124,5 @@ def main():
     elif st.session_state['page'] == 2:
         page_form_result_download(liver_model, scaler)
 
-# Menjalankan aplikasi
 if __name__ == "__main__":
     main()
