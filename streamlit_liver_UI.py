@@ -5,7 +5,6 @@ from io import BytesIO
 from xhtml2pdf import pisa
 
 def load_assets():
-    """Load model dan scaler yang diperlukan."""
     liver_model = pickle.load(open('liver_model.sav', 'rb'))
     scaler = pickle.load(open('scaler.sav', 'rb'))
     return liver_model, scaler
@@ -54,7 +53,7 @@ def page_form_result_download(liver_model, scaler):
     col1, col2 = st.columns(2)
 
     with col1:
-        Age = st.text_input("Umur", value="0")
+        Age = st.text_input("Umur")
         Total_Bilirubin = st.text_input("Total Bilirubin")
         Alkaline_Phosphotase = st.text_input("Alkaline Phosphotase")
         Aspartate_Aminotransferase = st.text_input("Aspartate Aminotransferase")
