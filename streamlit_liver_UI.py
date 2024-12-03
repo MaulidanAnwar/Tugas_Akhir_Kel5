@@ -10,6 +10,22 @@ st.set_page_config(
     layout="centered",  # Opsi layout: "centered" atau "wide"
 )
 
+background_url = "https://raw.githubusercontent.com/MaulidanAnwar/Final-Project-Group-5/ed3d1ff7a23f46f414c4f3f67ecc311b2b5b8e39/10554240.jpg"
+
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("{background_url}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Fungsi untuk membuat PDF
 def generate_pdf(content):
     pdf_buffer = BytesIO()
