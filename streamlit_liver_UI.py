@@ -50,7 +50,6 @@ def page_welcome():
         st.session_state['page'] = 2
 
 def page_form_result_download(liver_model, scaler):
-    """Halaman form input, hasil prediksi, dan download PDF."""
     st.header("📝 Masukkan Data Pasien")
     col1, col2 = st.columns(2)
 
