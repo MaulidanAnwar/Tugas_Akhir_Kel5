@@ -20,6 +20,12 @@ def generate_pdf(content):
         raise ValueError("Gagal membuat PDF.")
     return pdf_buffer
 
+st.set_page_config(
+    page_title="Prediksi Penyakit Liver", 
+    page_icon="🩺", 
+    layout="centered",
+)
+
 background_url = "https://raw.githubusercontent.com/MaulidanAnwar/Final-Project-Group-5/929c4288ff7618d043646f5d6ffb5dcecdcb945d/healthcare-accessories-with-modern-devices-green-background.jpg"
 
 st.markdown(
