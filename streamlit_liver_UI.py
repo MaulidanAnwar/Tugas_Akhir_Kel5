@@ -48,12 +48,18 @@ if 'liv_diagnosis' not in st.session_state:
     st.session_state['liv_diagnosis'] = ''
 
 def page_welcome():
-    st.title("🩺 **Prediksi Penyakit Liver**")
+    st.markdown(
+        """
+        <h1 style="color: darkblue;">🩺 <b>Prediksi Penyakit Liver</b></h1>
+        """,
+        unsafe_allow_html=True
+    )
     st.subheader("Selamat datang! Aplikasi ini menggunakan data mining untuk mendeteksi kemungkinan penyakit liver.")
     st.markdown("---")
     if st.button("Mulai", key="start_button"):
         st.session_state['page'] = 2
         st.rerun()
+
 
 def page_form_result_download(liver_model, scaler):
     st.header("📝 Masukkan Data Pasien")
