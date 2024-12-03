@@ -61,7 +61,7 @@ def page_welcome():
         st.rerun()
 
 
-def page_form_result_download(liver_model, scaler):
+def page_formulir(liver_model, scaler):
     st.header("📝 Masukkan Data Pasien")
     
     Nama = st.text_input("Nama Pasien")
@@ -136,7 +136,7 @@ def main():
     if st.session_state['page'] == 1:
         page_welcome()
     elif st.session_state['page'] == 2:
-        page_form_result_download(liver_model, scaler)
+        page_formulir(liver_model, scaler)
 
 if __name__ == "__main__":
     main()
