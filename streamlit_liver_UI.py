@@ -4,13 +4,26 @@ import streamlit as st
 from io import BytesIO
 from xhtml2pdf import pisa
 
-st.set_page_config(
-    page_title="Prediksi Penyakit Liver",  # Judul yang muncul di tab browser
-    page_icon="🩺",  # Ikon yang muncul di tab browser
-    layout="centered",  # Opsi layout: "centered" atau "wide"
-)
+# ======== Fungsi Utilitas ========
+def load_assets():
+    """Load model dan scaler yang diperlukan."""
+    liver_model = pickle.load(open('liver_model.sav', 'rb'))
+    scaler = pickle.load(open('scaler.sav', 'rb'))
+    return liver_model, scaler
 
-background_url = "https://raw.githubusercontent.com/MaulidanAnwar/Final-Project-Group-5/ed3d1ff7a23f46f414c4f3f67ecc311b2b5b8e39/10554240.jpg"
+def generate_pdf(content):
+    """Generate file PDF dari konten HTML."""
+    pdf_buffer = BytesIO()
+    pisa_status = pisa.CreatePDF(
+        src=BytesIO(content.encode("utf-8")),
+        dest=pdf_buffer
+    )
+    pdf_buffer.seek(0)
+    if pisa_status.err:
+        raise ValueError("Gagal membuat PDF.")
+    return pdf_buffer
+
+background_url = "https://raw.githubusercontent.com/MaulidanAnwar/Final-Project-Group-5/929c4288ff7618d043646f5d6ffb5dcecdcb945d/healthcare-accessories-with-modern-devices-green-background.jpg"
 
 st.markdown(
     f"""
@@ -26,38 +39,29 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Fungsi untuk membuat PDF
-def generate_pdf(content):
-    pdf_buffer = BytesIO()
-    pisa_status = pisa.CreatePDF(
-        src=BytesIO(content.encode("utf-8")),
-        dest=pdf_buffer
-    )
-    pdf_buffer.seek(0)
-    if pisa_status.err:
-        raise ValueError("Gagal membuat PDF.")
-    return pdf_buffer
 
-# Load model dan scaler
-liver_model = pickle.load(open('liver_model.sav', 'rb'))
-scaler = pickle.load(open('scaler.sav', 'rb'))
-
-# Judul aplikasi
-st.title("🩺 **Prediksi Penyakit Liver**")
-st.subheader("Aplikasi ini menggunakan data mining untuk mendeteksi kemungkinan penyakit liver.")
-st.markdown("---")
-
-# Inisialisasi session state
+# Session state agar 
+if 'page' not in st.session_state:
+    st.session_state['page'] = 1
 if 'liv_diagnosis' not in st.session_state:
     st.session_state['liv_diagnosis'] = ''
 
-# Form Input
-with st.form("form_diagnosis"):
+# ======== Halaman ========
+def page_welcome():
+    """Halaman pertama untuk menyambut pengguna."""
+    st.title("🩺 **Prediksi Penyakit Liver**")
+    st.subheader("Selamat datang! Aplikasi ini menggunakan data mining untuk mendeteksi kemungkinan penyakit liver.")
+    st.markdown("---")
+    if st.button("Mulai"):
+        st.session_state['page'] = 2
+
+def page_form_result_download(liver_model, scaler):
+    """Halaman form input, hasil prediksi, dan download PDF."""
     st.header("📝 Masukkan Data Pasien")
     col1, col2 = st.columns(2)
 
     with col1:
-        Age = st.text_input("Umur")
+        Age = st.text_input("Umur", value="0")
         Total_Bilirubin = st.text_input("Total Bilirubin")
         Alkaline_Phosphotase = st.text_input("Alkaline Phosphotase")
         Aspartate_Aminotransferase = st.text_input("Aspartate Aminotransferase")
@@ -70,11 +74,8 @@ with st.form("form_diagnosis"):
         Total_Protiens = st.text_input("Total Protein")
         Albumin_and_Globulin_Ratio = st.text_input("Albumin & Globulin Ratio")
 
-    # Tombol untuk prediksi
-    submitted = st.form_submit_button("🔍 Prediksi")
-    if submitted:
+    if st.button("🔍 Prediksi"):
         try:
-            # Konversi input hanya untuk model, biarkan Gender dalam bentuk teks untuk PDF
             Gender_numeric = 1 if Gender == "Laki-laki" else 0
             input_data = np.array([[ 
                 float(Age), Gender_numeric, float(Total_Bilirubin), float(Direct_Bilirubin), 
@@ -83,36 +84,31 @@ with st.form("form_diagnosis"):
                 float(Albumin), float(Albumin_and_Globulin_Ratio)
             ]])
             std_data = scaler.transform(input_data)
-            liv_prediction = liver_model.predict(std_data)
-
-            if liv_prediction[0] == 1:
-                st.session_state['liv_diagnosis'] = 'Pasien terkena penyakit liver.'
-            else:
-                st.session_state['liv_diagnosis'] = 'Pasien tidak terkena penyakit liver.'
-
+            prediction = liver_model.predict(std_data)
+            st.session_state['liv_diagnosis'] = (
+                'Pasien terkena penyakit liver.' if prediction[0] == 1 else 'Pasien tidak terkena penyakit liver.'
+            )
             st.success(st.session_state['liv_diagnosis'])
         except ValueError:
             st.error("Pastikan semua input berupa angka yang valid!")
 
-# Tombol untuk mengunduh hasil
-st.markdown("---")
-if st.button("⬇️ Unduh Hasil Sebagai PDF"):
-    if st.session_state['liv_diagnosis'] == '':
-        st.error("Lakukan prediksi terlebih dahulu sebelum mengunduh PDF!")
-    else:
-        # Menampilkan hasil PDF dengan format desimal pada kolom tertentu
+    # Unduh PDF
+    if st.session_state['liv_diagnosis']:
+        user_inputs = [Age, Gender, Total_Bilirubin, Direct_Bilirubin, Alkaline_Phosphotase, 
+                       Alamine_Aminotransferase, Aspartate_Aminotransferase, Total_Protiens, 
+                       Albumin, Albumin_and_Globulin_Ratio]
         html_content = f"""
         <h1>Data Mining Prediksi Liver</h1>
-        <p><strong>Umur:</strong> {Age}</p>
-        <p><strong>Gender:</strong> {Gender}</p>
-        <p><strong>Total Bilirubin:</strong> {Total_Bilirubin}</p>
-        <p><strong>Direct Bilirubin:</strong> {Direct_Bilirubin}</p>
-        <p><strong>Alkaline Phosphotase:</strong> {Alkaline_Phosphotase}</p>
-        <p><strong>Alamine Aminotransferase:</strong> {Alamine_Aminotransferase}</p>
-        <p><strong>Aspartate Aminotransferase:</strong> {Aspartate_Aminotransferase}</p>
-        <p><strong>Total Protein:</strong> {Total_Protiens}</p>
-        <p><strong>Albumin:</strong> {Albumin}</p>
-        <p><strong>Albumin and Globulin Ratio:</strong> {Albumin_and_Globulin_Ratio}</p>
+        <p><strong>Umur:</strong> {user_inputs[0]}</p>
+        <p><strong>Gender:</strong> {user_inputs[1]}</p>
+        <p><strong>Total Bilirubin:</strong> {user_inputs[2]}</p>
+        <p><strong>Direct Bilirubin:</strong> {user_inputs[3]}</p>
+        <p><strong>Alkaline Phosphotase:</strong> {user_inputs[4]}</p>
+        <p><strong>Alamine Aminotransferase:</strong> {user_inputs[5]}</p>
+        <p><strong>Aspartate Aminotransferase:</strong> {user_inputs[6]}</p>
+        <p><strong>Total Protein:</strong> {user_inputs[7]}</p>
+        <p><strong>Albumin:</strong> {user_inputs[8]}</p>
+        <p><strong>Albumin and Globulin Ratio:</strong> {user_inputs[9]}</p>
         <h2>Hasil Diagnosis:</h2>
         <p>{st.session_state['liv_diagnosis']}</p>
         """
@@ -126,3 +122,16 @@ if st.button("⬇️ Unduh Hasil Sebagai PDF"):
             )
         except ValueError as e:
             st.error(f"Gagal membuat PDF: {e}")
+    
+# ======== Alur Utama ========
+def main():
+    """Alur utama aplikasi dengan dua sequence."""
+    liver_model, scaler = load_assets()
+    if st.session_state['page'] == 1:
+        page_welcome()
+    elif st.session_state['page'] == 2:
+        page_form_result_download(liver_model, scaler)
+
+# Menjalankan aplikasi
+if __name__ == "__main__":
+    main()
