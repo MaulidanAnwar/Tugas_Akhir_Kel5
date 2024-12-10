@@ -42,19 +42,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("""
-    <style>
-    label {
-        color: black !important;
-        font-weight: bold !important;
-    }
-
-    input {
-        color: black !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
 if 'page' not in st.session_state:
     st.session_state['page'] = 1
 if 'liv_diagnosis' not in st.session_state:
