@@ -31,19 +31,33 @@ background_url = "https://raw.githubusercontent.com/MaulidanAnwar/Final-Project-
 st.markdown(
     f"""
     <style>
-    .stApp {{
-        background-image: url("{background_url}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }}
+        .stApp {{
+            background-image: url("{background_url}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: white; /* Warna dasar untuk fallback */
+        }}
+        .stAlert {{
+            background-color: #007BFF !important;  /* Warna biru solid */
+            color: white !important;  /* Warna font putih */
+            border-radius: 8px !important;  /* Membulatkan sudut */
+            padding: 20px !important;  /* Menambah ruang di dalam elemen */
+        }}
+        .stAlert > div[role="alert"] {{
+            background-color: #007BFF !important;  /* Warna biru solid */
+            color: white !important;  /* Warna font putih */
+        }}
     </style>
     """,
     unsafe_allow_html=True
 )
 
+
 if 'page' not in st.session_state:
     st.session_state['page'] = 1
+
+    
 if 'liv_diagnosis' not in st.session_state:
     st.session_state['liv_diagnosis'] = ''
 
@@ -105,21 +119,68 @@ def page_formulir(liver_model, scaler):
                        Alamine_Aminotransferase, Aspartate_Aminotransferase, Total_Protiens, 
                        Albumin, Albumin_and_Globulin_Ratio]
         html_content = f"""
-        <h1>Data Mining Prediksi Liver</h1>
-        <p><strong>Nama:</strong> {user_inputs[0]}</p>
-        <p><strong>Umur:</strong> {user_inputs[1]}</p>
-        <p><strong>Gender:</strong> {user_inputs[2]}</p>
-        <p><strong>Total Bilirubin:</strong> {user_inputs[3]}</p>
-        <p><strong>Direct Bilirubin:</strong> {user_inputs[4]}</p>
-        <p><strong>Alkaline Phosphotase:</strong> {user_inputs[5]}</p>
-        <p><strong>Alamine Aminotransferase:</strong> {user_inputs[6]}</p>
-        <p><strong>Aspartate Aminotransferase:</strong> {user_inputs[7]}</p>
-        <p><strong>Total Protein:</strong> {user_inputs[8]}</p>
-        <p><strong>Albumin:</strong> {user_inputs[9]}</p>
-        <p><strong>Albumin and Globulin Ratio:</strong> {user_inputs[10]}</p>
-        <h2>Hasil Diagnosis:</h2>
-        <p>{st.session_state['liv_diagnosis']}</p>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    }}
+                 h1 {{
+                    text-align: center;
+                    color: #2C3E50;
+                    font-size: 18px;
+                    }}
+                 h2 {{
+                    color: #34495E;
+                    font-size: 16px;
+                    }}
+                p {{
+                    font-size: 16px;
+                    line-height: 1.6;
+                    }}
+                table {{
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-top: 20px;
+                    }}
+                table, th, td {{
+                    border: 1px solid #ddd;
+                    }}
+                th, td {{
+                    padding: 8px;
+                    text-align: left;
+                    font-size: 16px;
+                    }}
+                th {{
+                    background-color: #f2f2f2;
+                    font-size: 18px;
+                    }}
+            </style>
+        </head>
+        <body>
+            <h1>Data Mining Prediksi Liver</h1>
+            <table>
+                <tr><th>Nama</th><td>{user_inputs[0]}</td></tr>
+                <tr><th>Umur</th><td>{user_inputs[1]}</td></tr>
+                <tr><th>Gender</th><td>{user_inputs[2]}</td></tr>
+                <tr><th>Total Bilirubin</th><td>{user_inputs[3]}</td></tr>
+                <tr><th>Direct Bilirubin</th><td>{user_inputs[4]}</td></tr>
+                <tr><th>Alkaline Phosphotase</th><td>{user_inputs[5]}</td></tr>
+                <tr><th>Alamine Aminotransferase</th><td>{user_inputs[6]}</td></tr>
+                <tr><th>Aspartate Aminotransferase</th><td>{user_inputs[7]}</td></tr>
+                <tr><th>Total Protiens</th><td>{user_inputs[8]}</td></tr>
+                <tr><th>Albumin</th><td>{user_inputs[9]}</td></tr>
+                <tr><th>Albumin & Globulin Ratio</th><td>{user_inputs[10]}</td></tr>
+            </table>
+            <h2>Hasil Diagnosis:</h2>
+            <p>{st.session_state['liv_diagnosis']}</p>
+        </body>
+        </html>
         """
+
+        
         try:
             pdf_file = generate_pdf(html_content)
             st.download_button(
